@@ -3,31 +3,32 @@ app = Flask(__name__)
 
 import pandas as pd
 df = pd.read_excel("milano_housing_02_2_23.xlsx", sheet_name='Sheet1')
+df = df.dropna(subset='neighborhood')
 
 @app.route('/', methods=['GET'])
-def form():
+def home():
     return render_template('home.html')
 
 @app.route('/quartiere', methods=['GET'])
 def quartiere():  
-    return render_template('input.html')
+    return render_template('input1.html')
 
 @app.route('/risultatoquartiere', methods=['GET'])
 def risultatoquartiere():
     inQuartiere = request.args.get('quartiere')
-    table = df[df['neighborhood'] == inQuartiere].sort_values(by='date')
+    table = df[df['neighborhood'].str.contains(inQuartiere)].sort_values(by='date')
     return render_template('risultato.html', table = table.to_html)
 
 @app.route('/elencoset', methods=['GET'])
 def elencoset():
     table = df['neighborhood'].tolist()
-    table = sorted(list(set(quartieri))[1:])
-    return render_template('risultato.html', table = table.to_html )
+    table = sorted(list(set(table)))
+    return render_template('risultato.html', table = table)
 
 @app.route('/elencodrop', methods=['GET'])
 def elencodrop():
     table = df.sort_values(by='neighborhood').drop_duplicates(subset='neighborhood')['neighborhood']
-    return render_template('risultato.html', table = table.to_html())
+    return render_template('risultato.html', table = table.tolist())
 
 @app.route('/prezzo', methods=['GET'])
 def prezzo():  
@@ -49,7 +50,7 @@ def prezzi():
 @app.route('/prezziremake', methods=['GET'])
 def prezziremake():
     return render_template('input3.html')
-    
+
 @app.route('/risultatoprezziremake', methods=['GET'])
 def risultatoprezziremake():
     def conversione(prezzo=1, tasso=1):
