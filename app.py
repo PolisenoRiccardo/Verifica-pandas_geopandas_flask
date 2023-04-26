@@ -31,7 +31,7 @@ def elencodrop():
 
 @app.route('/prezzo', methods=['GET'])
 def prezzo():  
-    return render_template('input1.html')
+    return render_template('input2.html')
 
 @app.route('/risultatoprezzo', methods=['GET'])
 def risultatoprezzo():
@@ -46,5 +46,17 @@ def prezzi():
     prezziQuartieri['media'] = prezziQuartieri // numeroPrezzi
     return render_template('risultato.html',  table = prezziQuartieri['media'].to_html() )
 
+@app.route('/prezziremake', methods=['GET'])
+def prezziremake():
+    return render_template('input3.html')
+    
+@app.route('/risultatoprezziremake', methods=['GET'])
+def risultatoprezziremake():
+    def conversione(prezzo=1, tasso=1):
+        return prezzo * tasso
+    tassodiConversione = request.args.get('tassoconversione')
+    tassodiConversione = float(tassodiConversione)
+    prezziQuartieri['mediaConvertito'] = conversione(prezziQuartieri['media'], tassodiConversione)
+    return render_template('risultato.html',  table = prezziQuartieri['mediaConvertito'].to_html() )
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=32245, debug=True)
