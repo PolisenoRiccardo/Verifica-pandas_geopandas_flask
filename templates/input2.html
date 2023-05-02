@@ -6,7 +6,11 @@
 <body>
     <form action='/risultatoprezzo' method="get">
         <p>Inserisci il quartiere:</p>
-        <input type="text" name="quartiere">      
+        <select name="quartiere">
+        {% for quartieri in quartieri %}
+            <option value="{{quartieri}}">{{quartieri}}</option>
+        {% endfor %}
+        </select>
         <input type="submit" value="Conferma">
     </form>
 </body>

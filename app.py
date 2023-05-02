@@ -25,14 +25,16 @@ def elencoset():
     table = sorted(list(set(table)))
     return render_template('risultato.html', table = table)
 
+quartieri = sorted(list(set(df.dropna(subset='neighborhood')['neighborhood'].tolist())))
+
 @app.route('/elencodrop', methods=['GET'])
 def elencodrop():
-    table = df.sort_values(by='neighborhood').drop_duplicates(subset='neighborhood')['neighborhood']
+    table = quartieri
     return render_template('risultato.html', table = table.tolist())
 
 @app.route('/prezzo', methods=['GET'])
 def prezzo():  
-    return render_template('input2.html')
+    return render_template('input2.html', quartieri = quartieri)
 
 @app.route('/risultatoprezzo', methods=['GET'])
 def risultatoprezzo():
