@@ -36,11 +36,23 @@ def elencodrop():
 def prezzo():  
     return render_template('input2.html', quartieri = quartieri)
 
+@app.route('/prezzoB', methods=['GET'])
+def prezzoB():  
+    return render_template('input2B.html', quartieri = quartieri)
+
 @app.route('/risultatoprezzo', methods=['GET'])
 def risultatoprezzo():
     inQuartiere = request.args.get('quartiere')
     serieQuartiere = df[df['neighborhood'] == inQuartiere]['price'].mean()
     return render_template('risultatodato.html', dato = round(serieQuartiere))
+
+@app.route('/risultatoprezzoB', methods=['GET'])
+def risultatoprezzoB():
+    inQuartiere = request.args.getlist('quartiere')
+    serieQuartiere = pd.DataFrame()
+    for quartiere in inQuartiere:
+     serieQuartiere = pd.concat(df[df['neighborhood'] == quartiere]['price'].mean())
+    return render_template('risultato.html', table = serieQuartiere.to_html())
 
 prezziQuartieri = df.groupby('neighborhood')[['price']].mean().sort_values(by='price', ascending=False)
 

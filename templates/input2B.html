@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Risultato</title>
+</head>
+<body>
+    <form action='/risultatoprezzoB' method="get">
+        <p>Inserisci il quartiere:</p>
+        {% for quartieri in quartieri %}
+        <input type="checkbox" id="{{quartieri}}" name="quartiere" value="{{quartieri}}">
+        <label for="{{quartieri}}">{{quartieri}}</label><br>
+        {% endfor %}
+        <input type="submit" value="Conferma">
+    </form>
+</body>
+</html>
